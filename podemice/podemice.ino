@@ -9,5 +9,6 @@ void setup(){
 }
 
 void loop(){
+  Serial.print("Orientation: ");
   Serial.println(GyroLoop());
 }

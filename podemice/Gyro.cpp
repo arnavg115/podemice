@@ -177,7 +177,12 @@ void normalize(magnetometer_raw magnetometer)
   normalized.magnetometer.z = magnetometer.z * 0.15 * (((magnetometer.adjustment.z - 128) / 256) + 1);
 }
 
-
+float lowPass(float in, float val){
+  if(abs(in) < val){
+    return 0;
+  }
+  return in;
+}
 
 void GyroSetup()
 {
@@ -223,39 +228,10 @@ float GyroLoop()
     } else if (!noise) {
       noise += sum / iters;
     } else {
-      orientation += (normalized.gyroscope.z - noise) * (deltaMillis / 1000.0);
-      Serial.print("deltaMillis, deltaSeconds:");
-      Serial.print(deltaMillis);
-      Serial.print(", ");
-      Serial.print(error);
-      Serial.print(" , ");
-      Serial.println(deltaMillis / 1000.0);
+      orientation += lowPass(normalized.gyroscope.z - noise, 0.5) * (deltaMillis / 1000.0);
     }
+    lastPrintMillis = currentMillis;
 
     return orientation;
- 
-    /*Serial.print("GYR (");
-    Serial.print("\xC2\xB0"); //Print degree symbol
-    Serial.print("/s):\t");
-    Serial.print(normalized.gyroscope.x, 3);
-    Serial.print("\t\t");
-    Serial.print(normalized.gyroscope.y, 3);
-    Serial.print("\t\t");
-    Serial.print(normalized.gyroscope.z, 3);
-    Serial.println();
- 
-    Serial.print("ACC (m/s^2):\t");
-    Serial.print(normalized.accelerometer.x, 3);
-    Serial.print("\t\t");
-    Serial.print(normalized.accelerometer.y, 3);
-    Serial.print("\t\t");
-    Serial.print(normalized.accelerometer.z, 3);
-    Serial.println(); */
- 
-    Serial.println();
- 
-    lastPrintMillis = currentMillis;
-  } else {
-    return 0.0;
   }
 }
