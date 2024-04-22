@@ -26,3 +26,10 @@
 ```
 
 See `Gyro.cpp`/`Gyro.h` to see this in action. This is an example for how a sensor can be added.
+
+## Run code
+
+1. Open Arduino ide
+2. Open the `podemice.ino` file in the ide.
+3. Upload the code.
+4. Open Serial monitor.
