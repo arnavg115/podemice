@@ -49,6 +49,9 @@ struct {
   float temperature;
 } normalized;
  
+float sum;
+int iters;
+float error;
 unsigned long lastPrintMillis = 0;
 static float noise = 0;
 float orientation = 0;
@@ -178,6 +181,9 @@ void normalize(magnetometer_raw magnetometer)
 
 void GyroSetup()
 {
+  sum = 0;
+  iters = 0;
+  error = 0;
 
   I2CwriteByte(MPU9250_IMU_ADDRESS, 27, GYRO_FULL_SCALE_1000_DPS); // Configure gyroscope range
   I2CwriteByte(MPU9250_IMU_ADDRESS, 28, ACC_FULL_SCALE_2G);        // Configure accelerometer range
@@ -193,10 +199,6 @@ void GyroSetup()
  
 float GyroLoop()
 {
-  static float sum = 0;
-  static int iters = 0;
-  static float error = 0;
-
   unsigned long currentMillis = millis();
   unsigned long deltaMillis = currentMillis - lastPrintMillis;
  
@@ -253,5 +255,7 @@ float GyroLoop()
     Serial.println();
  
     lastPrintMillis = currentMillis;
+  } else {
+    return 0.0;
   }
 }
