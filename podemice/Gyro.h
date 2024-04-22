@@ -1,2 +1,2 @@
 void GyroSetup();
-float GyroLoop();
+float GyroLoop(unsigned long currentMillis, unsigned long deltaMillis);

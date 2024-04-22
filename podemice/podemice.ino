@@ -1,14 +1,19 @@
-#include "Gyro.h";
-#include "Wire.h";
+#include "Sensor.h"
+#include "Wire.h"
+#include "Control.h"
 
 
 void setup(){
   Wire.begin();
   Serial.begin(9600);
-  GyroSetup();
+  int pins[] = {5,7,8,9,10};
+  SensorSetup(pins);
 }
 
 void loop(){
   Serial.print("Orientation: ");
-  Serial.println(GyroLoop());
+  Sensors a = SensorStep();
+  Serial.print(a.gyro_z);
+  Serial.print(" , IR: ");
+  Serial.println(a.ir_sensor);
 }

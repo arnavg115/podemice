@@ -52,7 +52,6 @@ struct {
 float sum;
 int iters;
 float error;
-unsigned long lastPrintMillis = 0;
 static float noise = 0;
 float orientation = 0;
  
@@ -202,11 +201,8 @@ void GyroSetup()
   I2CwriteByte(MPU9250_MAG_ADDRESS, 0x0A, 0x12); // Request continuous magnetometer measurements in 16 bits (mode 1)
 }
  
-float GyroLoop()
+float GyroLoop(unsigned long currentMillis, unsigned long deltaMillis)
 {
-  unsigned long currentMillis = millis();
-  unsigned long deltaMillis = currentMillis - lastPrintMillis;
- 
   if (isImuReady()) {
     readRawImu();
  
@@ -221,17 +217,15 @@ float GyroLoop()
     normalize(magnetometer);
   }
  
-  if (deltaMillis > INTERVAL_MS_PRINT) {
-    if (currentMillis < 5000) {
-      sum += normalized.gyroscope.z;
-      iters++;
-    } else if (!noise) {
-      noise += sum / iters;
-    } else {
-      orientation += lowPass(normalized.gyroscope.z - noise, 0.5) * (deltaMillis / 1000.0);
-    }
-    lastPrintMillis = currentMillis;
 
-    return orientation;
+  if (currentMillis < 5000) {
+    sum += normalized.gyroscope.z;
+    iters++;
+  } else if (!noise) {
+    noise += sum / iters;
+  } else {
+    orientation += lowPass(normalized.gyroscope.z - noise, 0.5) * (deltaMillis / 1000.0);
   }
+  
+  return orientation;
 }
