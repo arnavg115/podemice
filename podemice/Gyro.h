@@ -1,0 +1,2 @@
+void GyroSetup();
+void GyroLoop();
