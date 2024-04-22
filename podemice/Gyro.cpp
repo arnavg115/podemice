@@ -50,6 +50,8 @@ struct {
 } normalized;
  
 unsigned long lastPrintMillis = 0;
+static float noise = 0;
+float orientation = 0;
  
 
 // -------------------------------------------------
@@ -191,7 +193,12 @@ void GyroSetup()
  
 void GyroLoop()
 {
+  static float sum = 0;
+  static int iters = 0;
+  static float error = 0;
+
   unsigned long currentMillis = millis();
+  unsigned long deltaMillis = currentMillis - lastPrintMillis;
  
   if (isImuReady()) {
     readRawImu();
@@ -207,14 +214,23 @@ void GyroLoop()
     normalize(magnetometer);
   }
  
-  if (currentMillis - lastPrintMillis > INTERVAL_MS_PRINT) {
-    Serial.print("TEMP:\t");
-    Serial.print(normalized.temperature, 2);
-    Serial.print("\xC2\xB0"); //Print degree symbol
-    Serial.print("C");
-    Serial.println();
+  if (deltaMillis > INTERVAL_MS_PRINT) {
+    if (currentMillis < 5000) {
+      sum += normalized.gyroscope.z;
+      iters++;
+    } else if (!noise) {
+      noise += sum / iters;
+    } else {
+      orientation += (normalized.gyroscope.z - noise) * (deltaMillis / 1000.0);
+      Serial.print("deltaMillis, deltaSeconds:");
+      Serial.print(deltaMillis);
+      Serial.print(", ");
+      Serial.println(deltaMillis / 1000.0);
+    }
+
+    return orientation;
  
-    Serial.print("GYR (");
+    /*Serial.print("GYR (");
     Serial.print("\xC2\xB0"); //Print degree symbol
     Serial.print("/s):\t");
     Serial.print(normalized.gyroscope.x, 3);
@@ -230,17 +246,7 @@ void GyroLoop()
     Serial.print(normalized.accelerometer.y, 3);
     Serial.print("\t\t");
     Serial.print(normalized.accelerometer.z, 3);
-    Serial.println();
- 
-    Serial.print("MAG (");
-    Serial.print("\xce\xbc"); //Print micro symbol
-    Serial.print("T):\t");
-    Serial.print(normalized.magnetometer.x, 3);
-    Serial.print("\t\t");
-    Serial.print(normalized.magnetometer.y, 3);
-    Serial.print("\t\t");
-    Serial.print(normalized.magnetometer.z, 3);
-    Serial.println();
+    Serial.println(); */
  
     Serial.println();
  
