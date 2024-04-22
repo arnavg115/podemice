@@ -17,7 +17,7 @@
  
 #define TEMPERATURE_OFFSET 21 // As defined in documentation
  
-#define INTERVAL_MS_PRINT 1000
+#define INTERVAL_MS_PRINT 100
  
 #define G 9.80665
  
@@ -191,7 +191,7 @@ void GyroSetup()
   I2CwriteByte(MPU9250_MAG_ADDRESS, 0x0A, 0x12); // Request continuous magnetometer measurements in 16 bits (mode 1)
 }
  
-void GyroLoop()
+float GyroLoop()
 {
   static float sum = 0;
   static int iters = 0;
