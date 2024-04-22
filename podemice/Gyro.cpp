@@ -225,6 +225,8 @@ float GyroLoop()
       Serial.print("deltaMillis, deltaSeconds:");
       Serial.print(deltaMillis);
       Serial.print(", ");
+      Serial.print(error);
+      Serial.print(" , ");
       Serial.println(deltaMillis / 1000.0);
     }
 

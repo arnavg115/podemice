@@ -9,5 +9,5 @@ void setup(){
 }
 
 void loop(){
-  GyroLoop();
+  Serial.println(GyroLoop());
 }
