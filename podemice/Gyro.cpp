@@ -28,25 +28,12 @@ struct gyroscope_raw {
 struct accelerometer_raw {
   int16_t x, y, z;
 } accelerometer;
- 
-struct magnetometer_raw {
-  int16_t x, y, z;
- 
-  struct {
-    int8_t x, y, z;
-  } adjustment;
-} magnetometer;
- 
-struct temperature_raw {
-  int16_t value;
-} temperature;
- 
+  
 struct {
   struct {
     float x, y, z;
-  } accelerometer, gyroscope, magnetometer;
+  } accelerometer, gyroscope;
  
-  float temperature;
 } normalized;
  
 float sum;
@@ -54,11 +41,6 @@ int iters;
 float error;
 static float noise = 0;
 float orientation = 0;
- 
-
-// -------------------------------------------------
-// Copyright (c) 2022 HiBit <https://www.hibit.dev>
-// -------------------------------------------------
 
 bool isImuReady()
 {
@@ -75,7 +57,6 @@ void readRawImu()
 
   // Read output registers:
   // [59-64] Accelerometer
-  // [65-66] Temperature
   // [67-72] Gyroscope
   I2Cread(MPU9250_IMU_ADDRESS, 59, 14, buff);
 
@@ -84,64 +65,11 @@ void readRawImu()
   accelerometer.y = (buff[2] << 8 | buff[3]);
   accelerometer.z = (buff[4] << 8 | buff[5]);
 
-  // Temperature, create 16 bits values from 8 bits data
-  temperature.value = (buff[6] << 8 | buff[7]);
-
   // Gyroscope, create 16 bits values from 8 bits data
   gyroscope.x = (buff[8] << 8 | buff[9]);
   gyroscope.y = (buff[10] << 8 | buff[11]);
   gyroscope.z = (buff[12] << 8 | buff[13]);
 }
-
-// -------------------------------------------------
-// Copyright (c) 2022 HiBit <https://www.hibit.dev>
-// -------------------------------------------------
-
-void setMagnetometerAdjustmentValues()
-{
-  uint8_t buff[3];
-
-  I2CwriteByte(MPU9250_MAG_ADDRESS, 0x0A, 0x1F); // Set 16-bits output & fuse ROM access mode
-
-  delay(1000);
-
-  I2Cread(MPU9250_MAG_ADDRESS, 0x10, 3, buff); // Read adjustments
-
-  magnetometer.adjustment.x = buff[0]; //Adjustment for X axis
-  magnetometer.adjustment.y = buff[1]; //Adjustment for Y axis
-  magnetometer.adjustment.z = buff[2]; //Adjustment for Z axis
-
-  I2CwriteByte(MPU9250_MAG_ADDRESS, 0x0A, 0x10); // Power down
-}
-
-bool isMagnetometerReady()
-{
-  uint8_t isReady; // Interruption flag
-
-  I2Cread(MPU9250_MAG_ADDRESS, 0x02, 1, &isReady);
-
-  return isReady & 0x01; // Read register and wait for the DRDY
-}
-
-void readRawMagnetometer()
-{
-  uint8_t buff[7];
-
-  // Read output registers:
-  // [0x03-0x04] X-axis measurement
-  // [0x05-0x06] Y-axis measurement
-  // [0x07-0x08] Z-axis measurement
-  I2Cread(MPU9250_MAG_ADDRESS, 0x03, 7, buff);
-
-  // Magnetometer, create 16 bits values from 8 bits data
-  magnetometer.x = (buff[1] << 8 | buff[0]);
-  magnetometer.y = (buff[3] << 8 | buff[2]);
-  magnetometer.z = (buff[5] << 8 | buff[4]);
-}
-
-
-// Copyright (c) 2022 HiBit <https://www.hibit.dev>
-// -------------------------------------------------
 
 void normalize(gyroscope_raw gyroscope)
 {
@@ -159,25 +87,8 @@ void normalize(accelerometer_raw accelerometer)
   normalized.accelerometer.z = accelerometer.z * G / 16384;
 }
 
-void normalize(temperature_raw temperature)
-{
-  // Sensitivity Scale Factor (MPU datasheet page 11) & formula (MPU registers page 33)
-  normalized.temperature = ((temperature.value - TEMPERATURE_OFFSET) / 333.87) + TEMPERATURE_OFFSET;
-}
-
-void normalize(magnetometer_raw magnetometer)
-{
-  // Sensitivity Scale Factor (MPU datasheet page 10)
-  // 0.6 µT/LSB (14-bit)
-  // 0.15µT/LSB (16-bit)
-  // Adjustment values (MPU register page 53)
-  normalized.magnetometer.x = magnetometer.x * 0.15 * (((magnetometer.adjustment.x - 128) / 256) + 1);
-  normalized.magnetometer.y = magnetometer.y * 0.15 * (((magnetometer.adjustment.y - 128) / 256) + 1);
-  normalized.magnetometer.z = magnetometer.z * 0.15 * (((magnetometer.adjustment.z - 128) / 256) + 1);
-}
-
-float lowPass(float in, float val){
-  if(abs(in) < val){
+float lowPass (float in, float val) {
+  if (abs(in) < val) {
     return 0;
   }
   return in;
@@ -195,8 +106,6 @@ void GyroSetup()
   I2CwriteByte(MPU9250_IMU_ADDRESS, 55, 0x02); // Set by pass mode for the magnetometers
   I2CwriteByte(MPU9250_IMU_ADDRESS, 56, 0x01); // Enable interrupt pin for raw data
  
-  setMagnetometerAdjustmentValues();
- 
   //Start magnetometer
   I2CwriteByte(MPU9250_MAG_ADDRESS, 0x0A, 0x12); // Request continuous magnetometer measurements in 16 bits (mode 1)
 }
@@ -208,15 +117,7 @@ float GyroLoop(unsigned long currentMillis, unsigned long deltaMillis)
  
     normalize(gyroscope);
     normalize(accelerometer);
-    normalize(temperature);
   }
- 
-  if (isMagnetometerReady()) {
-    readRawMagnetometer();
- 
-    normalize(magnetometer);
-  }
- 
 
   if (currentMillis < 5000) {
     sum += normalized.gyroscope.z;

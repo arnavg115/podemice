@@ -1,3 +1,6 @@
+#ifndef SENSOR
+#define SENSOR
+
 struct Sensors
 {
     float gyro_z;
@@ -9,3 +12,5 @@ struct Sensors
 
 void SensorSetup(int a[]);
 Sensors SensorStep();
+
+#endif
