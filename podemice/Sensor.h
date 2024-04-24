@@ -5,8 +5,8 @@ struct Sensors
 {
     float gyro_z;
     int ir_sensor;
-    float UltraSonic1;
-    float UltraSonic2;
+    float ultrasonic1;
+    float ultrasonic2;
 };
 
 

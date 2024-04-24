@@ -25,10 +25,10 @@ Sensors SensorStep() {
     if(deltaMillis > SENSOR_FREQ){
         sensors.gyro_z = GyroLoop(currentMillis, deltaMillis);
         sensors.ir_sensor = IRLoop();
-        us = UltrasonicStep();
-        sensors.UltraSonic1 = us.u1;
-        sensors.UltraSonic2 = us.u2;
         lastPrintMillis = currentMillis;
+        us = UltrasonicStep();
+        sensors.ultrasonic1 = us.u1;
+        sensors.ultrasonic2 = us.u2;
     }
     
     return sensors;
