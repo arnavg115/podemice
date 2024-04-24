@@ -7,6 +7,7 @@ struct Sensors
     int ir_sensor;
     float ultrasonic1;
     float ultrasonic2;
+    float distance;
 };
 
 

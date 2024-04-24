@@ -1,7 +1,7 @@
 // This file is for all control logic
 
 #include "Motors.h"
-#include "Sensor.h"
+#include "Sensors.h"
 
 // pins = [motor1, motor2]
 void ControlSetup(int pins[]){

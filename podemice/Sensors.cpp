@@ -1,8 +1,9 @@
-#include "Sensor.h"
+#include "Sensors.h"
 #include "Arduino.h"
-#include "Gyro.h"
-#include "IRSensor.h"
-#include "Ultrasonic.h"
+#include "src/Sensor/Gyro.h"
+#include "src/Sensor/IRSensor.h"
+#include "src/Sensor/Ultrasonic.h"
+#include "src/Sensor/Odometer.h"
 
 #define SENSOR_FREQ 100
 
@@ -11,11 +12,12 @@ unsigned long lastPrintMillis = 0;
 struct Sensors sensors;
 struct Ultrasonic us;
 
-// pins = [ir_sensor_pin, echo1, trig1, echo1, trig2, encoder 1, encoder 2]
+// pins = [ir_sensor_pin, echo1, trig1, echo1, trig2, encoder 1, encoder 2, ]
 void SensorSetup (int pins[]) {
     GyroSetup();
     IRSetup(pins[0]);
     UltrasonicSetup(pins[2], pins[1], pins[4], pins[3]);
+    OdoSetup(pins[5], pins[6]);
 }
 
 Sensors SensorStep() {
@@ -25,6 +27,7 @@ Sensors SensorStep() {
     if(deltaMillis > SENSOR_FREQ){
         sensors.gyro_z = GyroLoop(currentMillis, deltaMillis);
         sensors.ir_sensor = IRLoop();
+        sensors.distance = OdoLoop(deltaMillis);
         lastPrintMillis = currentMillis;
         us = UltrasonicStep();
         sensors.ultrasonic1 = us.u1;

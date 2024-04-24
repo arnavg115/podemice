@@ -1,4 +1,4 @@
-#include "Sensor.h"
+#include "Sensors.h"
 
 void ControlSetup(int pins[]);
 
