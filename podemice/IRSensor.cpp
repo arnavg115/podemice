@@ -9,5 +9,5 @@ void IRSetup(int pin){
 
 // returns 1 if surface is closer than threshold, 0 otherwise
 int IRLoop(){
-    return 1-digitalRead(pinNum);
+  return 1-digitalRead(pinNum);
 }
