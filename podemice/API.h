@@ -11,7 +11,8 @@ class API {
         bool wallLeft();
         bool wallRight();
         bool wallFront();
+
 };
 
 void ControlSetup(int pins[]);
-void ControlLoop(Sensors info);
+void ControlStep(Sensors info);

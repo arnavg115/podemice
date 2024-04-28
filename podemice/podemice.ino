@@ -22,5 +22,5 @@ void loop(){
   Serial.print(a.ultrasonic1);
   Serial.print(", and ");
   Serial.println(a.ultrasonic2);
-  ControlLoop(a);
+  ControlStep(a);
 }

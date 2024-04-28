@@ -1,6 +1,7 @@
 #include "API.h"
 #include "Motors.h"
 #include "Sensors.h"
+#include "Arduino.h"
 
 Sensors data;
 
@@ -9,35 +10,54 @@ bool API::moveForward(int dist) {
     float startDisplacement = data.displacement;
     ToggleMotor1(1);
     ToggleMotor2(1);
-    while (data.displacement - startDisplacement < totalCM) {}
-    ToggleMotor1(0);
-    ToggleMotor2(0);
+    if (data.displacement - startDisplacement > totalCM) {
+        ToggleMotor1(0);
+        ToggleMotor2(0);
+        return true;
+    }
+    return false;
 }
 
 bool API::turnLeft(unsigned char deg) {
+    float startAngle = data.gyro_z;
+    ToggleMotor1(-1);
+    ToggleMotor2(1);
+    if (abs(startAngle - data.gyro_z) > deg) {
+        ToggleMotor1(0);
+        ToggleMotor2(0);
+        return true;
+    }
     return false;
 }
 
 bool API::turnRight(unsigned char deg) {
+    float startAngle = data.gyro_z;
+    ToggleMotor1(1);
+    ToggleMotor2(-1);
+    if (abs(startAngle - data.gyro_z) > deg) {
+        ToggleMotor1(0);
+        ToggleMotor2(0);
+        return true;
+    }
     return false;
 }
 
 bool API::wallLeft() {
-    return false;
+    return data.ultrasonic1 < 6;
 }
 
 bool API::wallRight() {
-    return false;
+    return data.ultrasonic2 < 6;
 }
 
 bool API::wallFront() {
-    return false;
+    return data.IRSENSOR;
 }
 
 void ControlSetup(int pins[]){
     MotorSetup(pins[0], pins[1]);
 }
 
-void ControlLoop(Sensors info){
+void ControlStep(Sensors info){
     data = info;
 }
