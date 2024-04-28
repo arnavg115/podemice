@@ -1,6 +1,10 @@
 #include "Sensors.h"
+#ifndef CONTROL
+#define CONTROL
 
-void ControlSetup(int pins[]);
+/*void ControlSetup(int pins[]);
 
 
-void ControlLoop(Sensors info);
+void ControlLoop(Sensors info);*/
+
+#endif

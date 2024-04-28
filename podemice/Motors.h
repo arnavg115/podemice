@@ -1,5 +1,5 @@
-
-
-
+#pragma once
 void MotorSetup(int p1, int p2);
-void RunMotorFor(unsigned long time, unsigned long duration);
+
+void ToggleMotor1(char dir);
+void ToggleMotor2(char dir);

@@ -127,6 +127,8 @@ float GyroLoop(unsigned long currentMillis, unsigned long deltaMillis)
   } else {
     orientation += lowPass(normalized.gyroscope.z - noise, 0.5) * (deltaMillis / 1000.0);
   }
+
+  Serial.print(normalized.accelerometer.x);
   
   return orientation;
 }
