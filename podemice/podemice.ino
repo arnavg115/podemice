@@ -3,7 +3,6 @@
 // #include "Control.h"
 #include "API.h"
 
-
 void setup(){
   Wire.begin();
   Serial.begin(9600);
