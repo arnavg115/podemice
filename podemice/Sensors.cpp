@@ -8,6 +8,7 @@
 
 
 unsigned long lastPrintMillis = 0;
+float gyroOutput[2];
 struct Sensors sensors;
 struct Ultrasonic us;
 
@@ -23,6 +24,7 @@ Sensors SensorStep() {
     unsigned long deltaMillis = currentMillis - lastPrintMillis;
     
     if(deltaMillis > SENSOR_FREQ){
+        //gyroOutput = GyroLoop(currentMillis, deltaMillis);
         sensors.gyro_z = GyroLoop(currentMillis, deltaMillis);
         sensors.ir_sensor = IRLoop();
         lastPrintMillis = currentMillis;

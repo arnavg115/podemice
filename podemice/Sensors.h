@@ -8,6 +8,7 @@ struct Sensors
     float ultrasonic1;
     float ultrasonic2;
     float displacement;
+    float velocity;
 };
 
 

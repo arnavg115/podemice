@@ -36,11 +36,13 @@ struct {
  
 } normalized;
  
-float sum;
+float o_sum;
+float v_sum;
 int iters;
-float error;
-static float noise = 0;
+static float o_noise = 0;
+static float v_noise = 0;
 float orientation = 0;
+float velocity = 0;
 
 bool isImuReady()
 {
@@ -87,7 +89,7 @@ void normalize(accelerometer_raw accelerometer)
   normalized.accelerometer.z = accelerometer.z * G / 16384;
 }
 
-float lowPass (float in, float val) {
+float o_lowPass (float in, float val) {
   if (abs(in) < val) {
     return 0;
   }
@@ -96,9 +98,9 @@ float lowPass (float in, float val) {
 
 void GyroSetup()
 {
-  sum = 0;
+  o_sum = 0;
+  v_sum = 0;
   iters = 0;
-  error = 0;
 
   I2CwriteByte(MPU9250_IMU_ADDRESS, 27, GYRO_FULL_SCALE_1000_DPS); // Configure gyroscope range
   I2CwriteByte(MPU9250_IMU_ADDRESS, 28, ACC_FULL_SCALE_2G);        // Configure accelerometer range
@@ -112,6 +114,7 @@ void GyroSetup()
  
 float GyroLoop(unsigned long currentMillis, unsigned long deltaMillis)
 {
+  float result[2];
   if (isImuReady()) {
     readRawImu();
  
@@ -120,15 +123,19 @@ float GyroLoop(unsigned long currentMillis, unsigned long deltaMillis)
   }
 
   if (currentMillis < 5000) {
-    sum += normalized.gyroscope.z;
+    o_sum += normalized.gyroscope.z;
+    v_sum += normalized.accelerometer.x;
     iters++;
-  } else if (!noise) {
-    noise += sum / iters;
+  } else if (!o_noise) {
+    o_noise += o_sum / iters;
+    v_noise += v_sum / iters;
   } else {
-    orientation += lowPass(normalized.gyroscope.z - noise, 0.5) * (deltaMillis / 1000.0);
+    orientation += o_lowPass(normalized.gyroscope.z - o_noise, 0.5) * (deltaMillis / 1000.0);
+    velocity += (normalized.accelerometer.z - v_noise) * (deltaMillis / 1000);
   }
 
-  Serial.print(normalized.accelerometer.x);
+  //result[1] = orientation;
+  //result[2] = velocity;
   
   return orientation;
 }

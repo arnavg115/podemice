@@ -2,16 +2,15 @@
 #pragma once
 
 class API {
-    public:
-        bool moveForward(int dist);
+public:
+    static bool moveForward(int dist);
 
-        bool turnLeft(unsigned char deg);
-        bool turnRight(unsigned char deg);
+    static bool turnLeft(unsigned char deg);
+    static bool turnRight(unsigned char deg);
 
-        bool wallLeft();
-        bool wallRight();
-        bool wallFront();
-
+    static bool wallLeft();
+    static bool wallRight();
+    static bool wallFront();
 };
 
 void ControlSetup(int pins[]);

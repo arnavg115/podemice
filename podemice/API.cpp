@@ -10,7 +10,7 @@ bool API::moveForward(int dist) {
     float startDisplacement = data.displacement;
     ToggleMotor1(1);
     ToggleMotor2(1);
-    if (data.displacement - startDisplacement > totalCM) {
+    if (data.displacement - startDisplacement > totalCM - 2) {
         ToggleMotor1(0);
         ToggleMotor2(0);
         return true;
@@ -22,7 +22,7 @@ bool API::turnLeft(unsigned char deg) {
     float startAngle = data.gyro_z;
     ToggleMotor1(-1);
     ToggleMotor2(1);
-    if (abs(startAngle - data.gyro_z) > deg) {
+    if (abs(startAngle - data.gyro_z) > deg - 3) {
         ToggleMotor1(0);
         ToggleMotor2(0);
         return true;
@@ -34,7 +34,7 @@ bool API::turnRight(unsigned char deg) {
     float startAngle = data.gyro_z;
     ToggleMotor1(1);
     ToggleMotor2(-1);
-    if (abs(startAngle - data.gyro_z) > deg) {
+    if (abs(startAngle - data.gyro_z) > deg - 3) {
         ToggleMotor1(0);
         ToggleMotor2(0);
         return true;
@@ -51,7 +51,7 @@ bool API::wallRight() {
 }
 
 bool API::wallFront() {
-    return data.IRSENSOR;
+    return data.ir_sensor;
 }
 
 void ControlSetup(int pins[]){
