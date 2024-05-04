@@ -9,6 +9,7 @@ struct Sensors
     float ultrasonic2;
     float displacement;
     float velocity;
+    unsigned long last_print_mil;
 };
 
 

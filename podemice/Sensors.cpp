@@ -26,9 +26,12 @@ Sensors SensorStep(unsigned long currentMillis, unsigned long deltaMillis) {
     // if(deltaMillis > 1000){
     //     //gyroOutput = GyroLoop(currentMillis, deltaMillis);
     sensors.gyro_z = GyroLoop(currentMillis, deltaMillis);
+
+    sensors.last_print_mil = millis();
+
     sensors.ir_sensor = IRLoop();
-    //us = UltrasonicStep();
-    //sensors.ultrasonic1 = us.u1;
+    us = UltrasonicStep();
+    sensors.ultrasonic1 = us.u1;
         // sensors.ultrasonic2 = us.u2;
     // }
     

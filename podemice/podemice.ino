@@ -28,12 +28,14 @@ void loop(){
       Serial.print(a.gyro_z);
       Serial.print(" , IR: ");
       Serial.println(a.ir_sensor);
+      Serial.print(" , Ultrasonic: ");
+      Serial.println(a.ultrasonic1);
       iter = 0;
     }
     /*Serial.print(", Ultrasonics: ");
     Serial.print(a.ultrasonic1);
     Serial.print(", and ");
     Serial.println(a.ultrasonic2);*/
-    lastPrintMillis = millis();
+    lastPrintMillis = a.last_print_mil;
    }
 }
