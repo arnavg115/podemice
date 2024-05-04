@@ -13,6 +13,6 @@ struct Sensors
 
 
 void SensorSetup(int a[]);
-Sensors SensorStep();
+Sensors SensorStep(unsigned long currentMillis, unsigned long deltaMillis);
 
 #endif
