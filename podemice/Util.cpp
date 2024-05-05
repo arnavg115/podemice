@@ -2,29 +2,26 @@
 #include "Util.h"
 #include "FloodFill.h"
 
-void Util::moveForward(char dist) {
-    API::moveForward(dist);
-
+int Util::moveForward(char dist) {
     switch (dir) {
-        case 0: x += dist; return;
-        case 1: y -= dist; return;
-        case 2: x -= dist; return;
-        case 3: y += dist; return;
+        case 0: x += dist; break;
+        case 1: y -= dist; break;
+        case 2: x -= dist; break;
+        case 3: y += dist; break;
     }
+
+    return 0x8000 | dist;
 }
 
 void Util::turnLeft() {
-    (void)API::turnLeft(90);
     dir = (dir+3)%4;
 }
 
 void Util::turnRight() {
-    (void)API::turnRight(90);
     dir = (dir+1)%4;
 }
 
 void Util::turnAround() {
-    (void)API::turnRight(180);
     dir = (dir+2)%4;
 }
 

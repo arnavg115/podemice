@@ -4,7 +4,7 @@ class Util {
 
 public:
 
-    static void moveForward(char dist = 1);
+    static int moveForward(char dist = 1);
     static void turnLeft();
     static void turnRight();
     static void turnAround();
