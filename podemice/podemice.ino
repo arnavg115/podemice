@@ -25,11 +25,13 @@ void loop(){
     iter++;
     if (iter % 10 == 0) {
       Serial.print("Orientation: ");
-      Serial.print(a.gyro_z);
+      Serial.println(a.gyro_z);
       Serial.print(" , IR: ");
       Serial.println(a.ir_sensor);
       Serial.print(" , Ultrasonic: ");
       Serial.println(a.ultrasonic1);
+      Serial.print(" , Odometer: ");
+      Serial.println(a.displacement);
       iter = 0;
     }
     /*Serial.print(", Ultrasonics: ");
