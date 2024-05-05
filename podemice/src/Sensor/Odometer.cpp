@@ -17,7 +17,7 @@ void OdoSetup(int pin1, int pin2) {
 // returns dist travelled since last reset in cm/s
 float OdoLoop(unsigned long deltaMillis) {
     if (digitalRead(sensor1)) {
-        dist += ((1/n_holes) * wheel_circumference) / (deltaMillis/1000);
+        dist += ((1/n_holes) * wheel_circumference) / (deltaMillis / 1000.0);
     }
     return dist;
 }

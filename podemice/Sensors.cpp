@@ -16,7 +16,8 @@ struct Ultrasonic us;
 void SensorSetup (int pins[]) {
     GyroSetup();
     IRSetup(pins[0]);
-    UltrasonicSetup(pins[2], pins[1], pins[4], pins[3]);
+    //UltrasonicSetup(pins[2], pins[1], pins[4], pins[3]);
+    OdoSetup(pins[4])
 }
 
 Sensors SensorStep(unsigned long currentMillis, unsigned long deltaMillis) {
@@ -26,12 +27,13 @@ Sensors SensorStep(unsigned long currentMillis, unsigned long deltaMillis) {
     // if(deltaMillis > 1000){
     //     //gyroOutput = GyroLoop(currentMillis, deltaMillis);
     sensors.gyro_z = GyroLoop(currentMillis, deltaMillis);
+    sensors.displacement = OdoLoop(deltaMillis);
 
     sensors.last_print_mil = millis();
 
     sensors.ir_sensor = IRLoop();
-    us = UltrasonicStep();
-    sensors.ultrasonic1 = us.u1;
+    //us = UltrasonicStep();
+    //sensors.ultrasonic1 = us.u1;
         // sensors.ultrasonic2 = us.u2;
     // }
     

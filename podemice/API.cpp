@@ -10,7 +10,7 @@ bool API::moveForward(int dist) {
     float startDisplacement = data.displacement;
     ToggleMotor1(1);
     ToggleMotor2(1);
-    if (data.displacement - startDisplacement > totalCM - 2) {
+    if (data.displacement - startDisplacement > totalCM - 0.5) {
         ToggleMotor1(0);
         ToggleMotor2(0);
         return true;
@@ -22,7 +22,7 @@ bool API::turnLeft(unsigned char deg) {
     float startAngle = data.gyro_z;
     ToggleMotor1(-1);
     ToggleMotor2(1);
-    if (abs(startAngle - data.gyro_z) > deg - 3) {
+    if (abs(startAngle - data.gyro_z) > deg - 1) {
         ToggleMotor1(0);
         ToggleMotor2(0);
         return true;
