@@ -55,7 +55,7 @@ bool API::wallFront() {
 }
 
 void ControlSetup(int pins[]){
-    MotorSetup(pins[0], pins[1]);
+    MotorSetup(pins[5], pins[7], pins[8], pins[9]);
 }
 
 void ControlStep(Sensors info){

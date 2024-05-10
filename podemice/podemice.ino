@@ -12,7 +12,7 @@ void setup(){
   while (!Serial)
   {
   }
-  int pins[] = {18,4,5,19,23, 32, 33};
+  int pins[] = {18,4,5,19,23, 32, 33, 25, 26, 27};
   SensorSetup(pins);
   //ControlSetup(pins);
 }
