@@ -2,19 +2,37 @@
 
 int m1 = -1;
 int m1bw = -1;
+int m1enable = -1;
 int m2 = -1;
 int m2bw = -1;
+int m2enable = -1;
 
-void MotorSetup(int p1, int n1, int p2, int n2) {
+const int freq = 30000;
+const int pwmChannel1 = 0;
+const int pwmChannel2 = 1;
+const int resolution = 8;
+int dutyCycle = 225;
+
+void MotorSetup(int p1, int n1, int e1, int p2, int n2, int e2) {
     m1 = p1;
     m1bw = n1;
+    m1enable = e1;
     m2 = p2;
     m2bw = n2;
+    m2enable = e2;
 
     pinMode(m1, OUTPUT);
     pinMode(m1bw, OUTPUT);
+    pinMode(m1enable, OUTPUT);
     pinMode(m2, OUTPUT);
     pinMode(m2bw, OUTPUT);
+    pinMode(m2enable, OUTPUT);
+
+    ledcSetup(pwmChannel1, freq, resolution);
+    ledcSetup(pwmChannel2, freq, resolution);
+    ledcAttachPin(m1enable, pwmChannel1);
+    ledcAttachPin(m2enable, pwmChannel2);
+
 }
 
 void ToggleMotor1(char dir) {
@@ -49,54 +67,14 @@ void ToggleMotor2(char dir) {
     }
 }
 
-/*
-int m1 = 2;
-int m1bw = 4; 
-int m2 = 3;
-int m2bw = 6;
-bool m1_on = false;
-bool m2_on = false;
-unsigned long startTime = -1;
-
-void MotorSetup(int p1, int p2, int p3, int p4) {
-    m1 = p1;
-    m1bw = p3;
-    m2 = p2;
-    m2bw = p4;
-    pinMode(m1, OUTPUT);
-    pinMode(m1bw, OUTPUT);
-    pinMode(m2, OUTPUT);
-    pinMode(m2bw, OUTPUT);
+void AdjustMotor1() {
+    digitalWrite(m1, HIGH);
+    digitalWrite(m1bw, LOW);
+    ledcWrite(pwmChannel1, dutyCycle);   
 }
 
-void ToggleMotor1(char dir) {
-    switch (dir) {
-        case -1:
-            digitalWrite(m1bw, HIGH);
-            break;
-        case 0:
-            digitalWrite(m1, LOW);
-            digitalWrite(m1bw, LOW);
-            break;
-        case 1:
-            digitalWrite(m1, HIGH);
-        default:
-            Serial.print("something has gone horribly wrong");
-    }
+void AdjustMotor2() {
+    digitalWrite(m2, HIGH);
+    digitalWrite(m2bw, LOW);
+    ledcWrite(pwmChannel2, dutyCycle);   
 }
-
-void ToggleMotor2(char dir) {
-    switch (dir) {
-        case -1:
-            digitalWrite(m2bw, HIGH);
-            break;
-        case 0:
-            digitalWrite(m2, LOW);
-            digitalWrite(m2bw, LOW);
-            break;
-        case 1:
-            digitalWrite(m2, HIGH);
-        default:
-            Serial.print("something has gone horribly wrong");
-    }
-}*/

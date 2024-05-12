@@ -10,15 +10,15 @@ static float noise = 0;
 float orientation = 0;
 
 MPU9250 IMU(i2c0, 0x68);
-int status;
+int gyro_status;
 
 void GyroSetup() {
-    status = IMU.begin();
-    if (status < 0) {
+    gyro_status = IMU.begin();
+    if (gyro_status < 0) {
         Serial.println("IMU initialization unsuccessful");
         Serial.println("Check IMU wiring or try cycling power");
         Serial.print("Status: ");
-        Serial.println(status);
+        Serial.println(gyro_status);
         while (1) {}
     }
     // setting the accelerometer full scale range to +/-8G

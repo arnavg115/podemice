@@ -1,5 +1,5 @@
-#include "Sensors.h"
 #pragma once
+#include "Sensors.h"
 
 class API {
 public:
