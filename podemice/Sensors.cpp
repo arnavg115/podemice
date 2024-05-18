@@ -8,35 +8,30 @@
 
 #define SENSOR_FREQ 1000
 
-
-float gyroOutput[2];
 struct Sensors sensors;
 struct Ultrasonic us;
 
-// pins = [ir_sensor_pin, echo1, trig1, echo1, trig2, encoder 1, encoder 2]
 void SensorSetup (int pins[]) {
     GyroSetup();
     IRSetup(pins[0]);
     UltrasonicSetup(pins[2], pins[1], pins[4], pins[3]);
-    OdoSetup(pins[7]);
+    OdoSetup(pins[12], pins[13]);
+    sensors.disp_x = 0;
+    sensors.disp_y = 0;
 }
 
 Sensors SensorStep(unsigned long currentMillis, unsigned long deltaMillis) {
-    // unsigned long currentMillis = millis();
-    // unsigned long deltaMillis = currentMillis - lastPrintMillis;
-    
-    // if(deltaMillis > 1000){
-    //     //gyroOutput = GyroLoop(currentMillis, deltaMillis);
-    //sensors.gyro_z = GyroLoop(currentMillis, deltaMillis);
-    sensors.displacement = OdoLoop(deltaMillis);
+    if(deltaMillis > 1000){
+        sensors.gyro_z = GyroLoop(currentMillis, deltaMillis);
+        sensors.displacement = OdoLoop(deltaMillis, &(sensors.disp_x), &(sensors.disp_y), sensors.gyro_z);
 
-    sensors.last_print_mil = millis();
+        sensors.last_print_mil = millis();
 
-    sensors.ir_sensor = IRLoop();
-    //us = UltrasonicStep();
-    //sensors.ultrasonic1 = us.u1;
-        // sensors.ultrasonic2 = us.u2;
-    // }
+        sensors.ir_sensor = IRLoop();
+        us = UltrasonicStep();
+        sensors.ultrasonic1 = us.u1;
+        sensors.ultrasonic2 = us.u2;
+    }
     
     return sensors;
 }

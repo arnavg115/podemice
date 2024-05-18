@@ -8,12 +8,13 @@ Sensors data;
 int turning = 0;
 int status = 0;
 float startDisplacement = 0;
+float startDispX = 0;
+float startDispY = 0;
 float startAngle = 0;
 float offset = 0;
 
 bool API::moveForward(int dist) {
     int totalCM = dist * 18;
-    // float startDisplacement = data.displacement;
     ToggleMotor1(1);
     ToggleMotor2(1);
 
@@ -26,7 +27,7 @@ bool API::moveForward(int dist) {
         ToggleMotor2(1);
     }
 
-    if (data.displacement - startDisplacement > totalCM - 0.5) {
+    if (max(abs(data.disp_x - startDispX), abs(data.disp_y - startDispY)) > totalCM - 0.5) {
         ToggleMotor1(0);
         ToggleMotor2(0);
         status = 0;
@@ -52,7 +53,6 @@ bool API::turnLeft(unsigned char deg) {
 
 bool API::turnRight(unsigned char deg) {
     turning = 1;
-    // float startAngle = data.gyro_z;
     ToggleMotor1(1);
     ToggleMotor2(-1);
     if (abs(startAngle - data.gyro_z) > deg - 3) {
@@ -98,6 +98,8 @@ void ControlStep(Sensors info){
             API::turnRight(90);
         default:
             startDisplacement = data.displacement;
+            startDispX = data.disp_x;
+            startDispY = data.disp_y;
             API::moveForward(status & 0xff);
     }
     offset = data.ultrasonic1 - data.ultrasonic2;

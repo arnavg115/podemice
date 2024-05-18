@@ -1,6 +1,5 @@
 #include "Sensors.h"
 #include "Wire.h"
-// #include "Control.h"
 #include "API.h"
 
 unsigned long lastPrintMillis = 0;
@@ -12,9 +11,8 @@ void setup(){
   while (!Serial)
   {
   }
-  int pins[] = {18,4,5,19,23, 32, 33, 25, 26, 27};
+  int pins[] = {18, 4, 5, 19, 23, 32, 33, 25, 26, 27, 33, 12, 13, 14};
   SensorSetup(pins);
-  //ControlSetup(pins);
 }
 
 void loop(){
@@ -30,14 +28,12 @@ void loop(){
       Serial.println(a.ir_sensor);
       Serial.print(" , Ultrasonic: ");
       Serial.println(a.ultrasonic1);
+      Serial.print(" and ");
+      Serial.println(a.ultrasonic2);
       Serial.print(" , Odometer: ");
       Serial.println(a.displacement);
       iter = 0;
     }
-    /*Serial.print(", Ultrasonics: ");
-    Serial.print(a.ultrasonic1);
-    Serial.print(", and ");
-    Serial.println(a.ultrasonic2);*/
     lastPrintMillis = a.last_print_mil;
    }
 }
