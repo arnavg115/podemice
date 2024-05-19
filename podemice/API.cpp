@@ -14,7 +14,7 @@ float startAngle = 0;
 float offset = 0;
 
 bool API::moveForward(int dist) {
-    int totalCM = dist * 18;
+    int totalCM = dist * 18.5;
     ToggleMotor1(1);
     ToggleMotor2(1);
 

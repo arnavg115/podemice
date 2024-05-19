@@ -11,7 +11,8 @@ const int freq = 30000;
 const int pwmChannel1 = 0;
 const int pwmChannel2 = 1;
 const int resolution = 8;
-int dutyCycle = 225;
+int dutyCycle1 = 225;
+int dutyCycle2 = 225;
 
 void MotorSetup(int p1, int n1, int e1, int p2, int n2, int e2) {
     m1 = p1;
@@ -38,6 +39,8 @@ void MotorSetup(int p1, int n1, int e1, int p2, int n2, int e2) {
 void ToggleMotor1(char dir) {
     switch (dir) {
         case -1:
+            dutyCycle1 = 225;
+            ledcWrite(pwmChannel1, dutyCycle1);
             digitalWrite(m1bw, HIGH);
             digitalWrite(m1, LOW);
             break;
@@ -46,6 +49,8 @@ void ToggleMotor1(char dir) {
             digitalWrite(m1, LOW);
             break;
         case 1:
+            dutyCycle1 = 255;
+            ledcWrite(pwmChannel1, dutyCycle1);
             digitalWrite(m1bw, LOW);
             digitalWrite(m1, HIGH);
     }
@@ -54,6 +59,8 @@ void ToggleMotor1(char dir) {
 void ToggleMotor2(char dir) {
     switch (dir) {
         case -1:
+            dutyCycle2 = 255;
+            ledcWrite(pwmChannel2, dutyCycle2);
             digitalWrite(m2bw, HIGH);
             digitalWrite(m2, LOW);
             break;
@@ -62,19 +69,23 @@ void ToggleMotor2(char dir) {
             digitalWrite(m2, LOW);
             break;
         case 1:
+            dutyCycle2 = 255;
+            ledcWrite(pwmChannel2, dutyCycle2);
             digitalWrite(m2bw, LOW);
             digitalWrite(m2, HIGH);
     }
 }
 
 void AdjustMotor1() {
+    dutyCycle1 = 225;
     digitalWrite(m1, HIGH);
     digitalWrite(m1bw, LOW);
-    ledcWrite(pwmChannel1, dutyCycle);   
+    ledcWrite(pwmChannel1, dutyCycle1);   
 }
 
 void AdjustMotor2() {
+    dutyCycle2 = 225;
     digitalWrite(m2, HIGH);
     digitalWrite(m2bw, LOW);
-    ledcWrite(pwmChannel2, dutyCycle);   
+    ledcWrite(pwmChannel2, dutyCycle2);   
 }
