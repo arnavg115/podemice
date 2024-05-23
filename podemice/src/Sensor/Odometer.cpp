@@ -1,6 +1,9 @@
 #include "Arduino.h"
 #define DEG_TO_RAD 0.01745329251
 
+int passes_wheel1 = 0;
+int passes_wheel2 = 0;
+
 
 float dist = 0;
 float wheel_circumference = 19.4778744523; // in cm
@@ -19,11 +22,15 @@ void OdoSetup(int pin1, int pin2) {
 // returns dist travelled since last reset in cm/s
 float OdoLoop(unsigned long deltaMillis, float *disp_x, float *disp_y, float gyro_z) {
     if (digitalRead(sensor1) == 1 && prev_reading == 0) {
+        //Serial.print("wheel 1: ");
+        //Serial.println(++passes_wheel1);
         dist += (1.0/n_holes) * wheel_circumference / 2;
         *disp_x = ((1.0/n_holes) * wheel_circumference) / 2 * sin(gyro_z * DEG_TO_RAD);
 
     }
     if (digitalRead(sensor2) == 1 && prev_reading == 0) {
+        //Serial.print("wheel 2: ");
+        //Serial.println(++passes_wheel2);
         dist += (1.0/n_holes) * wheel_circumference / 2;
         *disp_y = ((1.0/n_holes) * wheel_circumference) / 2 * cos(gyro_z * DEG_TO_RAD);
 

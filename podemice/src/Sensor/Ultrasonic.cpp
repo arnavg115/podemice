@@ -38,7 +38,7 @@ Ultrasonic UltrasonicStep() {
 	digitalWrite(trigPin2, LOW);  
 
     duration1 = pulseIn(echoPin1, HIGH, 5000);  
-    duration2 = pulseIn(echoPin2, HIGH);  
+    duration2 = pulseIn(echoPin2, HIGH, 5000);  
 
     distance1 = (duration1 * .0343)/2;  
     distance2 = (duration2 * .0343)/2;  

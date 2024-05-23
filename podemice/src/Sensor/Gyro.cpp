@@ -13,6 +13,7 @@ MPU9250 IMU(i2c0, 0x68);
 int gyro_status;
 
 void GyroSetup() {
+    Wire.begin();
     gyro_status = IMU.begin();
     if (gyro_status < 0) {
         Serial.println("IMU initialization unsuccessful");
