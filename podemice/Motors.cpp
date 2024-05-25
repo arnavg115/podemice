@@ -1,4 +1,5 @@
 #include "Arduino.h"
+#include "Motors.h"
 
 int m1 = -1;
 int m1bw = -1;
@@ -15,12 +16,12 @@ int dutyCycle1 = 225;
 int dutyCycle2 = 225;
 
 void MotorSetup(int p1, int n1, int e1, int p2, int n2, int e2) {
-    m1 = p1;
-    m1bw = n1;
-    m1enable = e1;
-    m2 = p2;
-    m2bw = n2;
-    m2enable = e2;
+    m1 = 25; // p1;
+    m1bw = 32; // n1;
+    m1enable = 33; // e1;
+    m2 = 27; // p2;
+    m2bw = 26; // n2;
+    m2enable = 15; // e2;
 
     pinMode(m1, OUTPUT);
     pinMode(m1bw, OUTPUT);

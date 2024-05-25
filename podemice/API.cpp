@@ -66,11 +66,14 @@ bool API::turnRight(unsigned char deg) {
 }
 
 bool API::wallLeft() {
-    return data.ultrasonic1 < 6;
+    return data.ultrasonic1 > 0 && data.ultrasonic1 < 6;
 }
 
 bool API::wallRight() {
-    return data.ultrasonic2 < 6;
+    if (data.ultrasonic1 == 0) { // temp if statement delete later
+        return true;
+    }
+    return data.ultrasonic2 > 0 && data.ultrasonic2 < 6;
 }
 
 bool API::wallFront() {
@@ -84,7 +87,7 @@ void ControlSetup(int pins[]){
 void ControlStep(Sensors info){
     data = info;
     if (!status) {
-        status = getCommand();
+        status = 0x01;// getCommand();
     }
     switch (status) {
         case 1:

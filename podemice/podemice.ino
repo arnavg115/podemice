@@ -1,6 +1,7 @@
 #include "Sensors.h"
 #include "Wire.h"
 #include "API.h"
+#include "Motors.h"
 
 unsigned long lastPrintMillis = 0;
 int iter = 0;
@@ -13,6 +14,7 @@ void setup(){
   }
   int pins[] = {18, 4, 5, 19, 23, 32, 33, 25, 26, 27, 33, 12, 13, 14};
   SensorSetup(pins);
+  MotorSetup(32, 25, 33, 26, 27, 15);
 }
 
 void loop(){
@@ -35,5 +37,6 @@ void loop(){
       iter = 0;
     }
     lastPrintMillis = a.last_print_mil;
+    ControlStep(a);
    }
 }
