@@ -18,12 +18,15 @@ void SensorSetup (int pins[]) {
     OdoSetup(pins[12], pins[13]);
     sensors.disp_x = 0;
     sensors.disp_y = 0;
+    sensors.wheel1 = 0;
+    sensors.wheel2 = 0;
 }
 
 Sensors SensorStep(unsigned long currentMillis, unsigned long deltaMillis) {
     //if(deltaMillis > 1000){
         sensors.gyro_z = GyroLoop(currentMillis, deltaMillis);
-        sensors.displacement = OdoLoop(deltaMillis, &(sensors.disp_x), &(sensors.disp_y), sensors.gyro_z);
+        sensors.displacement = OdoLoop(deltaMillis, &(sensors.disp_x), &(sensors.disp_y), sensors.gyro_z,
+            &(sensors.wheel1), &(sensors.wheel2));
 
         sensors.last_print_mil = millis();
 

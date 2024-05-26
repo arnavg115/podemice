@@ -27,7 +27,7 @@ void UltrasonicSetup(int pin1, int pin2, int pin3, int pin4) {
 	pinMode(echoPin2, INPUT);
 }
 
-Ultrasonic UltrasonicStep() {
+Ultrasonic UltrasonicStep() {/*
     digitalWrite(trigPin1, LOW);  
 	//digitalWrite(trigPin2, LOW);  
 	delayMicroseconds(2);  
@@ -35,7 +35,7 @@ Ultrasonic UltrasonicStep() {
 	//digitalWrite(trigPin2, HIGH);  
 	delayMicroseconds(10);  
 	digitalWrite(trigPin1, LOW);  
-	//digitalWrite(trigPin2, LOW);  
+	//digitalWrite(trigPin2, LOW);  */
 
     duration1 = pulseIn(echoPin1, HIGH, 5000);  
 

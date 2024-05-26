@@ -18,16 +18,22 @@ void OdoSetup(int pin1, int pin2) {
 }
 
 // returns dist travelled since last reset in cm/s
-float OdoLoop(unsigned long deltaMillis, float *disp_x, float *disp_y, float gyro_z) {
+float OdoLoop(unsigned long deltaMillis, float *disp_x, float *disp_y, float gyro_z, int *wheel1, int *wheel2) {
     if (digitalRead(sensor1) == 1 && prev_reading1 == 0) {
         dist += (1.0/n_holes) * wheel_circumference / 2;
-        *disp_x = ((1.0/n_holes) * wheel_circumference) / 2 * sin(gyro_z * DEG_TO_RAD);
-
+        *disp_x += ((1.0/n_holes) * wheel_circumference) / 2 * sin(gyro_z * DEG_TO_RAD);
+        *disp_y += ((1.0/n_holes) * wheel_circumference) / 2 * cos(gyro_z * DEG_TO_RAD);
     }
     if (digitalRead(sensor2) == 1 && prev_reading2 == 0) {
         dist += (1.0/n_holes) * wheel_circumference / 2;
-        *disp_y = ((1.0/n_holes) * wheel_circumference) / 2 * cos(gyro_z * DEG_TO_RAD);
-
+        *disp_y += ((1.0/n_holes) * wheel_circumference) / 2 * cos(gyro_z * DEG_TO_RAD);
+        *disp_x += ((1.0/n_holes) * wheel_circumference) / 2 * sin(gyro_z * DEG_TO_RAD);
+    } // one idea is to in each of the ifs below, just add ^ /4 instead of /2
+    if (digitalRead(sensor1) != prev_reading1) {
+        *(wheel1) += 1;
+    }
+    if (digitalRead(sensor2) != prev_reading2) {
+        *(wheel2) += 1;
     }
     prev_reading1 = digitalRead(sensor1);
     prev_reading2 = digitalRead(sensor2);

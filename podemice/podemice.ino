@@ -19,21 +19,21 @@ void setup(){
 
 void loop(){
   unsigned long currentMillis = millis();
-   unsigned long deltaMillis = currentMillis - lastPrintMillis;
-   if(deltaMillis > 10){
+  unsigned long deltaMillis = currentMillis - lastPrintMillis;
+  if(deltaMillis > 3){
     Sensors a = SensorStep(currentMillis, deltaMillis);
     iter++;
-    if (iter % 50 == 0) {
-      Serial.print("Orientation: ");
-      Serial.println(a.gyro_z);
+    if (iter % 200 == 0) {
+      //Serial.print("Orientation: ");
+      //Serial.println(a.gyro_z);
       Serial.print(" , IR: ");
       Serial.println(a.ir_sensor);
-      Serial.print(" , Ultrasonic: ");
-      Serial.print(a.ultrasonic1);
-      Serial.print(" and ");
-      Serial.println(a.ultrasonic2);
-      Serial.print(" , Odometer: ");
-      Serial.println(a.displacement);
+      //Serial.print(" , Ultrasonic: ");
+      //Serial.print(a.ultrasonic1);
+      //Serial.print(" and ");
+      //Serial.println(a.ultrasonic2);
+      //Serial.print(" , Odometer: ");
+      //Serial.println(a.displacement);
       iter = 0;
     }
     lastPrintMillis = a.last_print_mil;

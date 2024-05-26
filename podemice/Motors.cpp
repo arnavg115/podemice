@@ -37,10 +37,10 @@ void MotorSetup(int p1, int n1, int e1, int p2, int n2, int e2) {
 
 }
 
-void ToggleMotor1(char dir) {
+void ToggleMotor1(int dir) {
     switch (dir) {
         case -1:
-            dutyCycle1 = 225;
+            dutyCycle1 = 255 * .98;
             ledcWrite(pwmChannel1, dutyCycle1);
             digitalWrite(m1bw, HIGH);
             digitalWrite(m1, LOW);
@@ -50,14 +50,14 @@ void ToggleMotor1(char dir) {
             digitalWrite(m1, LOW);
             break;
         case 1:
-            dutyCycle1 = 255;
+            dutyCycle1 = 255 * .98;
             ledcWrite(pwmChannel1, dutyCycle1);
             digitalWrite(m1bw, LOW);
             digitalWrite(m1, HIGH);
     }
 }
 
-void ToggleMotor2(char dir) {
+void ToggleMotor2(int dir) {
     switch (dir) {
         case -1:
             dutyCycle2 = 255;
@@ -77,16 +77,30 @@ void ToggleMotor2(char dir) {
     }
 }
 
-void AdjustMotor1() {
-    dutyCycle1 = 225;
+void AdjustMotor1(int cycle) {
+    dutyCycle1 = cycle * .98;
     digitalWrite(m1, HIGH);
     digitalWrite(m1bw, LOW);
     ledcWrite(pwmChannel1, dutyCycle1);   
 }
 
-void AdjustMotor2() {
-    dutyCycle2 = 225;
+void AdjustMotor2(int cycle) {
+    dutyCycle2 = cycle;
     digitalWrite(m2, HIGH);
     digitalWrite(m2bw, LOW);
+    ledcWrite(pwmChannel2, dutyCycle2);   
+}
+
+void AdjustMotor1B(int cycle) {
+    dutyCycle1 = cycle * .98;
+    digitalWrite(m1bw, HIGH);
+    digitalWrite(m1, LOW);
+    ledcWrite(pwmChannel1, dutyCycle1);   
+}
+
+void AdjustMotor2B(int cycle) {
+    dutyCycle2 = cycle;
+    digitalWrite(m2bw, HIGH);
+    digitalWrite(m2, LOW);
     ledcWrite(pwmChannel2, dutyCycle2);   
 }

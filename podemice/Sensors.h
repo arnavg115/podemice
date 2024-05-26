@@ -12,6 +12,8 @@ struct Sensors
     float disp_y;
     float velocity;
     unsigned long last_print_mil;
+    int wheel1;
+    int wheel2;
 };
 
 

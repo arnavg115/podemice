@@ -4,8 +4,8 @@
 
 #define RAD_TO_DEG 57.295779513082320876798154814105
 
-float sum;
-int iters;
+float sum = 0;
+int iters = 0;
 static float noise = 0;
 float orientation = 0;
 
@@ -40,14 +40,18 @@ float lowPass (float in, float val) {
 }
 
 float GyroLoop(unsigned long currentMillis,  unsigned long deltaMillis) {
-    
     IMU.readSensor();
 
-    /*Serial.print("ang velo: ");
-    Serial.println(IMU.getGyroZ_rads() * RAD_TO_DEG);
-    Serial.print("\n");*/
+    /*if (iters < 300) {
+        sum += IMU.getGyroZ_rads();
+        iters += 1;
+    } else {
+        Serial.print("ang velo: ");
+        Serial.println(IMU.getGyroZ_rads() * RAD_TO_DEG);
+        Serial.print("\n");*/
 
     orientation += (lowPass((IMU.getGyroZ_rads() * RAD_TO_DEG), 0.1) * (deltaMillis / 1000.0)) * 1.2;
+    //}
 
  
     return orientation;
